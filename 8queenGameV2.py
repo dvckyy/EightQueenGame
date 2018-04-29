@@ -76,8 +76,41 @@ def getCoorXY(t, vectors, coox=0, cooy=0):
 # Funciones Basicas
 
 
-def ask_play(t):
+def ask_play2(t):
     a, b = input("Ingrese su jugada ( en terminos fil,col ): ").split(",")
+    return a, b
+
+
+def ask_play(t):
+    begin = time.time()
+    time.clock()
+    elapsed = 0
+    n = len(t)
+    a = -1
+    b = -1
+    while elapsed < TIME_LEFT:
+        try:
+            print(
+                "Ingrese su jugada en terminos fil,col (Presione Ctrl+C para iniciar) Tiempo: {:f}".format(TIME_LEFT - elapsed))
+            sleep(1)
+            elapsed = time.time() - begin
+        except KeyboardInterrupt:
+            a, b = raw_input("-> fil,col: ").split(",")
+            try:
+                elapsed = time.time() - begin
+                a = int(a)
+                b = int(b)
+                if a > n-1 or a < 0 or b > n-1 or b < 0:
+                    a = -1
+                    b = -1
+                else:
+                    break
+            except ValueError:
+                print("No es un numero!")
+    if a == -1 or b == -1 or elapsed > TIME_LEFT:
+        print("Se termino su turno!")
+        a = -1
+        b = -1
     return a, b
 
 
@@ -135,11 +168,13 @@ T = [[-1, -1, -1, -1, -1],
      [-1, -1, -1, -1, -1],
      [-1, -1, -1, -1, -1],
      [-1, -1, -1, -1, -1]]
+TIME_LEFT = 30
 PLAYER_SCORE = 0
 BOT_SCORE = 0
 MAX_SCORE = 40
 
 while REINAS <= MAX_REINAS and ERRORES < MAX_ERRORES:
+
     fil, col = ask_play(T)
     if fil != -1 and col != -1:
         if isMoveLegal(T, fil, col):
