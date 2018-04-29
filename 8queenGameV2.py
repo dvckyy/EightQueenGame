@@ -1,4 +1,6 @@
 import random
+import time
+from time import sleep
 
 # Funciones de dibujo
 
@@ -76,8 +78,6 @@ def getCoorXY(t, vectors, coox=0, cooy=0):
 
 def ask_play(t):
     a, b = input("Ingrese su jugada ( en terminos fil,col ): ").split(",")
-    if int(a) > len(t)-1 or int(a) < 0 or int(b) > len(t)-1 or int(b) < 0:
-        ask_play(t)
     return a, b
 
 
@@ -112,12 +112,24 @@ def sumScore(score):
     return score
 
 
+def scoreTally():
+    if BOT_SCORE >= MAX_SCORE:
+        Resultado = "Winner Bot"
+    elif PLAYER_SCORE >= MAX_SCORE:
+        Resultado = "Winner Human"
+    elif PLAYER_SCORE >= MAX_SCORE and BOT_SCORE >= MAX_SCORE:
+        Resultado = "Empateee !!!!!"
+    if ERRORES > MAX_ERRORES:
+        Resultado = "Has Perdido"
+    return
+
+
 n = 8
 REINAS = 0
 MAX_REINAS = n
 MAX_ERRORES = 3
 ERRORES = 0
-RESULTADO = "Has Perdido"
+Resultado = "Has Perdido"
 T = [[-1, -1, -1, -1, -1],
      [-1, -1, -1, -1, -1],
      [-1, -1, -1, -1, -1],
@@ -127,46 +139,40 @@ PLAYER_SCORE = 0
 BOT_SCORE = 0
 MAX_SCORE = 40
 
-while REINAS <= MAX_REINAS or ERRORES < MAX_ERRORES:
+while REINAS <= MAX_REINAS and ERRORES < MAX_ERRORES:
     fil, col = ask_play(T)
-    if isMoveLegal(T, fil, col):
-        bot = CrearBot()
-        T = insert_square(T, fil, col)
-        draw(T, 'Q')
-        PLAYER_SCORE += 10
-        print ("Human Score = {} , Bot Score = {}".format(
-            PLAYER_SCORE, BOT_SCORE))
+    if fil != -1 and col != -1:
+        if isMoveLegal(T, fil, col):
+            T = insert_square(T, fil, col)
+            draw(T, 'Q')
+            PLAYER_SCORE += 10
+            print ("Human Score = {} , Bot Score = {}".format(
+                PLAYER_SCORE, BOT_SCORE))
+        else:
+            ERRORES += 1
+            PLAYER_SCORE -= 5
+            print("La jugada no es correcta , Errores = {}".format(ERRORES))
+            print ("Human Score = {} , Bot Score = {}".format(
+                PLAYER_SCORE, BOT_SCORE))
+            continue
 
-        print("Maquina esta pensando...")
-        bot.generator(T)
-        AI_fil, AI_col = getCoorXY(T, bot.values)
+    bot = CrearBot()
+    print("Maquina esta pensando...")
+    bot.generator(T)
+    AI_fil, AI_col = getCoorXY(T, bot.values)
 
-        if AI_fil == "Imposible":
-            Resultado = "Has ganado!!!"
-            break
+    if AI_fil == "Imposible":
+        break
 
-        t = insert_square(T, AI_fil, AI_col)
-        draw(T, '@')
+    t = insert_square(T, AI_fil, AI_col)
+    draw(T, '@')
 
-        BOT_SCORE += 10
-        print ("Human Score = {} , Bot Score = {}".format(
-            PLAYER_SCORE, BOT_SCORE))
-        if BOT_SCORE >= MAX_SCORE:
-            Resultado = "Winner Bot"
-            break
-        elif PLAYER_SCORE >= MAX_SCORE:
-            Resultado = "Winner Human"
-            break
-        elif PLAYER_SCORE >= MAX_SCORE and BOT_SCORE >= MAX_SCORE:
-            Resultado = "Empateee !!!!!"
-            break
-        REINAS += 1
+    BOT_SCORE += 10
 
-    else:
-        ERRORES += 1
-        PLAYER_SCORE -= 5
-        print ("Human Score = {} , Bot Score = {}".format(
-            PLAYER_SCORE, BOT_SCORE))
-        print("La jugada no es correcta , Errores = {}".format(ERRORES))
+    print ("Human Score = {} , Bot Score = {}".format(
+        PLAYER_SCORE, BOT_SCORE))
 
+    ERRORES = 0
+    REINAS += 1
+scoreTally()
 print(Resultado)
