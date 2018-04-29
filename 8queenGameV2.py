@@ -95,7 +95,7 @@ def ask_play(t):
             sleep(1)
             elapsed = time.time() - begin
         except KeyboardInterrupt:
-            a, b = raw_input("-> fil,col: ").split(",")
+            a, b = input("-> fil,col: ").split(",")
             try:
                 elapsed = time.time() - begin
                 a = int(a)
@@ -163,11 +163,14 @@ MAX_REINAS = n
 MAX_ERRORES = 3
 ERRORES = 0
 Resultado = "Has Perdido"
-T = [[-1, -1, -1, -1, -1],
-     [-1, -1, -1, -1, -1],
-     [-1, -1, -1, -1, -1],
-     [-1, -1, -1, -1, -1],
-     [-1, -1, -1, -1, -1]]
+T = [[-1, -1, -1, -1, -1, -1, -1, -1],
+     [-1, -1, -1, -1, -1, -1, -1, -1],
+     [-1, -1, -1, -1, -1, -1, -1, -1],
+     [-1, -1, -1, -1, -1, -1, -1, -1],
+     [-1, -1, -1, -1, -1, -1, -1, -1],
+     [-1, -1, -1, -1, -1, -1, -1, -1],
+     [-1, -1, -1, -1, -1, -1, -1, -1],
+     [-1, -1, -1, -1, -1, -1, -1, -1]]
 TIME_LEFT = 30
 PLAYER_SCORE = 0
 BOT_SCORE = 0
@@ -181,13 +184,13 @@ while REINAS <= MAX_REINAS and ERRORES < MAX_ERRORES:
             T = insert_square(T, fil, col)
             draw(T, 'Q')
             PLAYER_SCORE += 10
-            print ("Human Score = {} , Bot Score = {}".format(
+            print("Human Score = {} , Bot Score = {}".format(
                 PLAYER_SCORE, BOT_SCORE))
         else:
             ERRORES += 1
             PLAYER_SCORE -= 5
             print("La jugada no es correcta , Errores = {}".format(ERRORES))
-            print ("Human Score = {} , Bot Score = {}".format(
+            print("Human Score = {} , Bot Score = {}".format(
                 PLAYER_SCORE, BOT_SCORE))
             continue
 
@@ -204,7 +207,7 @@ while REINAS <= MAX_REINAS and ERRORES < MAX_ERRORES:
 
     BOT_SCORE += 10
 
-    print ("Human Score = {} , Bot Score = {}".format(
+    print("Human Score = {} , Bot Score = {}".format(
         PLAYER_SCORE, BOT_SCORE))
 
     ERRORES = 0
